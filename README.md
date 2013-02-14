@@ -1,5 +1,6 @@
 To convert a WADL remote file in JSON
 
 ```
-sbt "run http://api.example.com/api/resources/application.wadl"
+$ sbt start-script
+$ ./wadl2json http://api.example.com/api/resources/application.wadl
 ```

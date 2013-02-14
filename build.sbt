@@ -1,3 +1,6 @@
+import com.typesafe.sbt.SbtStartScript._
+import StartScriptKeys._
+
 name := "wadl2json"
 
 version := "1.0"
@@ -11,3 +14,7 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-core" % "7.0.0-M7",
   "org.scalaz" %% "scalaz-effect" % "7.0.0-M7"
 )
+
+seq(startScriptForClassesSettings: _*)
+
+startScriptFile <<= (baseDirectory, name)(_ / _)
