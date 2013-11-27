@@ -10,37 +10,42 @@ import Scalaz._
 object Wadl2Json {
   implicit val formats = DefaultFormats
 
-  case class Param(name: String, style: String)
   type Path = String
   type Verb = String
-  type Resource = Map[Verb, scala.collection.immutable.Seq[Param]]
-  type Resources = Map[Path, Resource]
 
-  def xml2param(e: Elem): Option[Param] = {
-    List("name", "style") flatMap (e.attrs.get(_)) match {
-      case List(name, style) => Param(name, style).some
-      case _ => None
-    }
+  case class Param(name: String, style: String)
+  case class Method(verb: Verb, name: String, params: List[Param])
+  case class Resource(path: Path, methods: List[Method])
+
+  def xml2param(e: Elem): Option[Param] = for {
+    name <- e.attrs.get("name")
+    style <- e.attrs.get("style")
+  } yield Param(name, style)
+
+  def xml2method(e: Elem, inheritedParams: List[Param]): Option[Method] = for {
+    verb <- e.attrs.get("name")
+    id <- e.attrs.get("id")
+    params <- (e \\ "param").toList.flatMap(xml2param _).some
+  } yield Method(verb, id, inheritedParams ++ params)
+
+  def xml2resources(e: Elem, inheritedPath: Option[Path]): List[Resource] = {
+    val path = (inheritedPath.map(_ + "/") | "") + e.attrs.getOrElse("path", "")
+    val params = (e \ "param").toList.flatMap(xml2param _)
+
+    val resource = Resource(path, (e \ "method").toList.flatMap(xml2method(_, params)))
+    val resources = (e \ "resource").toList.flatMap(xml2resources(_, path.some))
+
+    (resource :: resources).filter(_.methods.size > 0)
   }
 
-  def xml2resources(e: Elem): Resources = {
-    val path = e.attrs.getOrElse("path", "")
-    val params = (e \ "param").toList.flatMap(xml2param _).toSeq
-
-    val resource = (e \ "method").toList.flatMap(m => {
-      m.attrs.get("name").map(_ -> (params ++ (m \\ "param").toList.flatMap(xml2param _).toSeq))
-    }).toMap
-
-    val resources = (e \ "resource").toList.foldLeft(Map(path -> resource)) {
-      case (rr, e) => rr ++ (xml2resources(e)).toList.map {
-        case (p, r) => (path + "/" + p) -> r.mapValues(_ ++ params)
-      }.toMap
-    }
-
-    resources.filter(_._2.size > 0)
+  def resources2map(resources: List[Resource]): Map[Path, List[Method]] = {
+    resources.map(resource => resource.path -> resource.methods).toMap
   }
 
   def fromXML(e: Elem): String = {
-    Serialization.writePretty((e \\ "resources").headOption.map(xml2resources _).getOrElse(Map.empty))
+    val resources: List[Resource] = (e \\ "resources").toList.flatMap(xml2resources(_, none))
+    val resourcesMap: Map[Path, List[Method]] = resources2map(resources)
+
+    Serialization.writePretty(resourcesMap)
   }
 }
