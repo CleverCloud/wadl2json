@@ -4,6 +4,8 @@ import com.codecommit.antixml._
 
 import net.liftweb.json._
 
+import scala.collection._
+
 import scalaz._
 import Scalaz._
 
@@ -45,7 +47,8 @@ object Wadl2Json {
   def fromXML(e: Elem): String = {
     val resources: List[Resource] = (e \\ "resources").toList.flatMap(xml2resources(_, none))
     val resourcesMap: Map[Path, List[Method]] = resources2map(resources)
+    val sortedMap: SortedMap[Path, List[Method]] = SortedMap(resourcesMap.toList.sortBy(_._1):_*).mapValues(_.sortBy(_.verb))
 
-    Serialization.writePretty(resourcesMap)
+    Serialization.writePretty(sortedMap)
   }
 }
