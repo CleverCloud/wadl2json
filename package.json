@@ -1,0 +1,22 @@
+{
+  "name": "wadl2json",
+  "version": "0.0.0",
+  "description": "Convert WADL strings, objects and files to JSON.",
+  "main": "wadl2json.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rbelouin/wadl2json.git"
+  },
+  "keywords": [
+    "convert",
+    "wadl",
+    "json",
+    "api"
+  ],
+  "author": "Rodolphe Belouin <rodolphe.belouin@gmail.com>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/rbelouin/wadl2json/issues"
+  },
+  "homepage": "https://github.com/rbelouin/wadl2json"
+}
