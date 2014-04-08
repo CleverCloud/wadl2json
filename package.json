@@ -23,5 +23,9 @@
     "xml2json": "^0.4.0",
     "lodash": "^2.4.1",
     "js-beautify": "^1.4.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-jasmine-node": "^0.2.1"
   }
 }
