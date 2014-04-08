@@ -91,7 +91,7 @@
    * @returns {object|string} JSON representation of given WADL content
    */
   exports.fromJSON = function(wadlJson, options) {
-    var options = _.extend({}, wadl2json._defaultOptions, options);
+    options = _.extend({}, wadl2json._defaultOptions, options);
 
     var app = wadlJson && wadlJson.application && wadlJson.application[0];
     var resources = app && app.resources && app.resources[0];
@@ -115,7 +115,7 @@
    */
   exports.fromString = function(wadlString, options) {
     /* Remove XML header as xml2json is not able to parse it */
-    var wadlString = wadlString.replace(/<\?[^<]*\?>/g, "");
+    wadlString = wadlString.replace(/<\?[^<]*\?>/g, "");
     var wadlJson = parser.toJson(wadlString, {
       object: true,
       arrayNotation: true
