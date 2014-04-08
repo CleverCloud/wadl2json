@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/rbelouin/wadl2json/issues"
   },
-  "homepage": "https://github.com/rbelouin/wadl2json"
+  "homepage": "https://github.com/rbelouin/wadl2json",
+  "dependencies": {
+    "xml2json": "^0.4.0"
+  }
 }
