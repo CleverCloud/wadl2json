@@ -29,5 +29,8 @@
     "grunt-jasmine-node": "^0.2.1",
     "grunt-jsdoc": "^0.5.4",
     "grunt-contrib-jshint": "^0.10.0"
+  },
+  "scripts": {
+    "test": "grunt test"
   }
 }

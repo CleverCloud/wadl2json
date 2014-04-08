@@ -19,7 +19,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-jsdoc");
   grunt.loadNpmTasks("grunt-contrib-jshint");
 
-  grunt.registerTask("test", ["jasmine_node"]);
+  grunt.registerTask("test", ["jshint", "jasmine_node"]);
 
-  grunt.registerTask("default", ["jshint", "test"]);
+  grunt.registerTask("default", ["test"]);
 };
