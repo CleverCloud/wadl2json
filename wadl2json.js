@@ -1,4 +1,5 @@
 var parser = require("xml2json");
+var fs = require("fs");
 var format = require("./format.js");
 
 exports.string2json = function(wadl, options) {
@@ -9,4 +10,9 @@ exports.string2json = function(wadl, options) {
     object: true,
     arrayNotation: true
   }), options);
+};
+
+exports.file2json = function(filename, options) {
+  var content = fs.readFileSync(filename).toString();
+  return exports.string2json(content, options);
 };
