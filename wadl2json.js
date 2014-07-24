@@ -79,7 +79,13 @@
     var paths = _.chain(methodsByPath).keys().sortBy().value();
 
     return _.foldl(paths, function(sortedMethods, path) {
-      sortedMethods[path] = _.sortBy(methodsByPath[path], "verb");
+      var methodsByVerb = _.groupBy(methodsByPath[path], "verb");
+      var verbs = _.chain(methodsByVerb).keys().sortBy().value();
+
+      sortedMethods[path] = _.foldl(verbs, function(methods, verb) {
+        return methods.concat(_.sortBy(methodsByVerb[verb], "name"));
+      }, []);
+
       return sortedMethods;
     }, {});
   };

@@ -40,6 +40,16 @@
         </resource>
         <resource path="organisations/{id}">
             <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="id" style="template" type="xs:string"/>
+            <method id="createOrganisation" name="POST">
+                <response>
+                    <representation mediaType="application/json"/>
+                </response>
+            </method>
+            <method id="getOrganisationWithFilter" name="GET">
+                <response>
+                    <representation mediaType="application/json"/>
+                </response>
+            </method>
             <method id="getOrganisation" name="GET">
                 <response>
                     <representation mediaType="application/json"/>
