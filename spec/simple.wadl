@@ -3,7 +3,7 @@
     <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.5.1 2014-01-02 13:43:00"/>
     <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://api.clever-cloud.com/v2/application.wadl?detail=true"/>
     <grammars/>
-    <resources base="http://api.example.com">
+    <resources base="http://api.example.com/basepath/">
         <resource path="users">
             <method id="getUsers" name="GET">
                 <response>
@@ -45,12 +45,18 @@
                     <representation mediaType="application/json"/>
                 </response>
             </method>
-            <method id="getOrganisationWithFilter" name="GET">
+            <method id="getOrganisationWithApps" name="GET">
+                <request>
+                    <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="show-apps" style="query" type="xs:boolean"/>
+                </request>
                 <response>
                     <representation mediaType="application/json"/>
                 </response>
             </method>
-            <method id="getOrganisation" name="GET">
+            <method id="getOrganisationWithMembers" name="GET">
+                <request>
+                    <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="show-members" style="query" type="xs:boolean"/>
+                </request>
                 <response>
                     <representation mediaType="application/json"/>
                 </response>

@@ -42,9 +42,7 @@
       return {
         verb: method.name,
         name: method.id,
-        params: _.map(params, function(param) {
-          return _.pick(param, ["name", "style"]);
-        }),
+        params: params,
         path: path
       };
     });
@@ -59,34 +57,38 @@
    * @returns {object} methods grouped by path
    */
   exports._groupMethodsByPath = function(methods) {
-    return _.chain(methods)
-      .groupBy("path")
-      .mapValues(function(methods) {
-        return _.map(methods, function(method) {
-          return _.omit(method, "path");
-        });
-      })
-      .value();
-  };
-
-  /**
-   * Sort methods by path, and then by verb
-   * @private
-   * @param {object} methodsByPath - methods returned by _groupMethodsByPath
-   * @returns {object} same object, with keys sorted by name
-   */
-  exports._sortMethodsByPathAndVerb = function(methodsByPath) {
+    var methodsByPath = _.groupBy(methods, "path");
     var paths = _.chain(methodsByPath).keys().sortBy().value();
 
-    return _.foldl(paths, function(sortedMethods, path) {
+    return _.foldl(paths, function(methods, path) {
       var methodsByVerb = _.groupBy(methodsByPath[path], "verb");
       var verbs = _.chain(methodsByVerb).keys().sortBy().value();
 
-      sortedMethods[path] = _.foldl(verbs, function(methods, verb) {
-        return methods.concat(_.sortBy(methodsByVerb[verb], "name"));
-      }, []);
+      return _.foldl(verbs, function(methods, verb) {
+        var sortedOperations = _.sortBy(methodsByVerb[verb], "name");
 
-      return sortedMethods;
+        methods[path] = methods[path] || {};
+        methods[path][verb.toLowerCase()] = {
+          responses: {
+            "default": {
+              description: _.pluck(sortedOperations, "name").join("\n")
+            }
+          },
+          parameters: _.chain(sortedOperations)
+            .pluck("params")
+            .flatten()
+            .uniq("name")
+            .map(function(param) {
+              return {
+                "name": param.name,
+                "in": ({template: "path", plain: "body"})[param.style] || param.style,
+                "type": param.type.split(":")[1] || param.type.split(":")[0]
+              };
+            })
+            .value()
+        };
+        return methods;
+      }, methods);
     }, {});
   };
 
@@ -101,16 +103,30 @@
 
     var app = wadlJson && wadlJson.application && wadlJson.application[0];
     var resources = app && app.resources && app.resources[0];
-    var base = resources && resources.base;
+    var base = resources && resources.base && require("url").parse(resources.base);
 
     var methods = _.flatten(_.map(resources && resources.resource, _.partial(wadl2json._methodsFromWADLResource, "/")));
     var methodsByPath = wadl2json._groupMethodsByPath(methods);
 
-    methodsByPath = options.sort ? wadl2json._sortMethodsByPathAndVerb(methodsByPath) : methodsByPath;
-    methodsByPath = options.stringify ? JSON.stringify(methodsByPath) : methodsByPath;
-    methodsByPath = options.stringify && options.prettify ? beautify(methodsByPath, {indent_size: 2}) : methodsByPath;
+    var json = {};
+    json.swagger = "2.0";
 
-    return methodsByPath;
+    json.schemes = [base.protocol.replace(/:$/, "")];
+    json.host = base.host;
+    json.basePath = base.path.replace(/\/$/, "");
+
+    json.paths = methodsByPath;
+
+    json.info = {
+      title: options.title || "",
+      version: options.version || "",
+      description: options.description || ""
+    };
+
+    json = options.stringify ? JSON.stringify(json) : json;
+    json = options.stringify && options.prettify ? beautify(json, {indent_size: 2}) : json;
+
+    return json;
   };
 
   /**
