@@ -7,7 +7,8 @@ describe("wadl2json.fromFile", function() {
     sort: true,
     title: "Simple API",
     description: "Simple API description",
-    version: "1.4.2"
+    version: "1.4.2",
+    blacklist: ["/internal"]
   });
 
   it("should generate the right swagger version", function() {
@@ -83,5 +84,10 @@ describe("wadl2json.fromFile", function() {
     expect(params[0]).toBe("id");
     expect(params[1]).toBe("show-apps");
     expect(params[2]).toBe("show-members");
+  });
+
+  it("should ignore blacklisted paths", function() {
+    expect(swaggerJson.paths["/internal/applications"]).toBeUndefined();
+    expect(swaggerJson.paths["/internal/applications/{appId}"]).toBeUndefined();
   });
 });

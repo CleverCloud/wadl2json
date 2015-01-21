@@ -105,7 +105,16 @@
     var resources = app && app.resources && app.resources[0];
     var base = resources && resources.base && require("url").parse(resources.base);
 
-    var methods = _.flatten(_.map(resources && resources.resource, _.partial(wadl2json._methodsFromWADLResource, "/")));
+    var methods = _.chain(resources && resources.resource)
+      .map(_.partial(wadl2json._methodsFromWADLResource, "/"))
+      .flatten()
+      .filter(function(method) {
+        return _.all(options.blacklist, function(path) {
+          return method.path.indexOf(path) !== 0;
+        });
+      })
+      .value();
+
     var methodsByPath = wadl2json._groupMethodsByPath(methods);
 
     var json = {};
