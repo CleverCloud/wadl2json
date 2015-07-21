@@ -76,7 +76,7 @@
           },
           parameters: _.chain(sortedOperations)
             .pluck("params")
-            .flatten()
+            .flatten(true)
             .uniq("name")
             .map(function(param) {
               return {
@@ -107,7 +107,7 @@
 
     var methods = _.chain(resources && resources.resource)
       .map(_.partial(wadl2json._methodsFromWADLResource, "/"))
-      .flatten()
+      .flatten(true)
       .filter(function(method) {
         return _.all(options.blacklist, function(path) {
           return method.path.indexOf(path) !== 0;
