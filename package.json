@@ -14,7 +14,7 @@
     "api"
   ],
   "author": "Rodolphe Belouin <rodolphe.belouin@gmail.com>",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/rbelouin/wadl2json/issues"
   },
