@@ -5,6 +5,8 @@ wadl2json
 
 Convert a remote WADL file into a JSON equivalent. See the [swagger spec](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md) for further information about the format of the JSON returned.
 
+See [rbelouin/wadl-client](https://github.com/rbelouin/wadl-client) for generating a javascript client from a swagger json file.
+
 How to use it
 -------------
 
