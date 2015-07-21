@@ -74,18 +74,25 @@
               description: _.pluck(sortedOperations, "name").join("\n")
             }
           },
-          parameters: _.chain(sortedOperations)
-            .pluck("params")
-            .flatten(true)
-            .uniq("name")
-            .map(function(param) {
-              return {
-                "name": param.name,
-                "in": ({template: "path", plain: "body"})[param.style] || param.style,
-                "type": param.type.split(":")[1] || param.type.split(":")[0]
-              };
-            })
-            .value()
+          parameters: (function() {
+            var params = _.chain(sortedOperations)
+              .pluck("params")
+              .flatten(true)
+              .uniq("name")
+              .map(function(param) {
+                return {
+                  "name": param.name,
+                  "required": param.style == "template",
+                  "in": ({template: "path", plain: "body"})[param.style] || param.style,
+                  "type": param.type.split(":")[1] || param.type.split(":")[0]
+                };
+              })
+              .value();
+
+            if(_.size(params) > 0) {
+              return params;
+            }
+          })()
         };
         return methods;
       }, methods);

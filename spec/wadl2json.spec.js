@@ -1,4 +1,6 @@
 var wadl2json = require("../wadl2json.js");
+var parser = require("swagger-parser");
+var fs = require("fs");
 
 var _ = require("lodash");
 
@@ -89,5 +91,12 @@ describe("wadl2json.fromFile", function() {
   it("should ignore blacklisted paths", function() {
     expect(swaggerJson.paths["/internal/applications"]).toBeUndefined();
     expect(swaggerJson.paths["/internal/applications/{appId}"]).toBeUndefined();
+  });
+
+  it("swagger-parser should be able to parse it without errors", function(done) {
+    fs.writeFileSync("./spec/swagger.json", JSON.stringify(swaggerJson));
+    parser.parse("./spec/swagger.json", function(err) {
+      done(err);
+    });
   });
 });
