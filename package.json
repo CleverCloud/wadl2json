@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/rbelouin/wadl2json",
   "dependencies": {
-    "xml2json": "^0.7.1",
+    "js-beautify": "^1.5.10",
     "lodash": "^3.10.0",
-    "js-beautify": "^1.5.10"
+    "request": "^2.60.0",
+    "xml2json": "^0.7.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -4,8 +4,7 @@
  */
 (function() {
   var fs = require("fs");
-  var http = require("http");
-  var https = require("https");
+  var request = require("request");
   var url = require("url");
 
   var _ = require("lodash");
@@ -13,9 +12,6 @@
   var beautify = require("js-beautify").js_beautify;
 
   var wadl2json = exports;
-  wadl2json._fetchers = {};
-  wadl2json._fetchers["http:"] = http;
-  wadl2json._fetchers["https:"] = https;
 
   wadl2json._defaultOptions = {
     prettify:   false,
@@ -187,24 +183,13 @@
    * @param {object} [options] - options
    */
   exports.fromURL = function(wadlURL, callback, options) {
-    var protocol = url.parse(wadlURL).protocol;
-    var fetcher = wadl2json._fetchers[protocol];
-
-    if(!fetcher) {
-      callback(new Error("Invalid protocol: " + protocol + "//"));
-    }
-    else {
-      fetcher.get(wadlURL, function(res) {
-        var wadlString = "";
-        res.on("data", function(data) {
-          wadlString += data;
-        });
-        res.on("end", function() {
-          callback(null, wadl2json.fromString(wadlString, options));
-        });
-      }).on("error", function(error) {
-        callback(error);
-      });
-    }
+    request(wadlURL, function(err, res, body) {
+      if(err) {
+        callback(err);
+      }
+      else {
+        callback(null, wadl2json.fromString(body, options));
+      }
+    });
   };
 })();
