@@ -183,7 +183,17 @@
    * @param {object} [options] - options
    */
   exports.fromURL = function(wadlURL, callback, options) {
-    request(wadlURL, function(err, res, body) {
+    var opt = {
+      uri: wadlURL
+    };
+
+    if(wadlURL.indexOf("https://") === 0) {
+      opt.agent = new (require("https").Agent)({
+        keepAlive: true
+      });
+    }
+
+    request(opt, function(err, res, body) {
       if(err) {
         callback(err);
       }

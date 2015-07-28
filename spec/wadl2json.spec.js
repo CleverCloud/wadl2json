@@ -100,3 +100,24 @@ describe("wadl2json.fromFile", function() {
     });
   });
 });
+
+describe("wadl2json.fromURL", function() {
+  it("should generate the same swagger data when accessing an application.wadl via HTTP or HTTPS", function(done) {
+    var urlSuffix = "ccapi-preprod.cleverapps.io/v2/application.wadl";
+    var opt = {
+      sort: true,
+      stringify: true,
+      title: "Simple API",
+      description: "Simple API description",
+      version: "1.4.2",
+      blacklist: ["/internal"]
+    };
+
+    wadl2json.fromURL("http://" + urlSuffix, function(err, sw1) {
+      wadl2json.fromURL("https://" + urlSuffix, function(err, sw2) {
+        expect(sw1).toBe(sw2);
+        done();
+      }, opt);
+    }, opt);
+  });
+});
