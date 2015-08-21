@@ -15,6 +15,7 @@
             <method id="getUserOrganisations" name="GET">
                 <request>
                     <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="user" style="query" type="xs:string"/>
+                    <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="limit" style="query" type="xs:int"/>
                 </request>
                 <response>
                     <representation mediaType="application/json"/>

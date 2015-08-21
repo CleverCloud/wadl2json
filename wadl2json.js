@@ -19,6 +19,11 @@
     stringify:  false
   };
 
+  function convertWadlParamType(prefixedType) {
+    var type = prefixedType.split(":")[1] || prefixedType.split(":")[0];
+    return type == "int" ? "integer" : type;
+  }
+
   /**
    * Extract all methods from a parsed WADL content
    * @private
@@ -80,7 +85,7 @@
                   "name": param.name,
                   "required": param.style == "template",
                   "in": ({template: "path", plain: "body"})[param.style] || param.style,
-                  "type": param.type.split(":")[1] || param.type.split(":")[0]
+                  "type": convertWadlParamType(param.type)
                 };
               })
               .value();
