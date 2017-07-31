@@ -10,16 +10,12 @@ module.exports = function(grunt) {
         src: ["wadl2json.js"]
       }
     },
-    jshint: {
-      all: ["Gruntfile.js", "wadl2json.js", "spec/**/*.js"]
-    }
   });
 
   grunt.loadNpmTasks("grunt-jasmine-node");
   grunt.loadNpmTasks("grunt-jsdoc");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
 
-  grunt.registerTask("test", ["jshint", "jasmine_node"]);
+  grunt.registerTask("test", ["jasmine_node"]);
 
   grunt.registerTask("default", ["test"]);
 };
