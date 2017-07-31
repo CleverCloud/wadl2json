@@ -1,6 +1,6 @@
 {
   "name": "wadl2json",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Convert WADL strings, objects and files to JSON.",
   "main": "wadl2json.js",
   "repository": {
