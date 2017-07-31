@@ -5,7 +5,7 @@
   "main": "wadl2json.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rbelouin/wadl2json.git"
+    "url": "https://github.com/CleverCloud/wadl2json.git"
   },
   "keywords": [
     "convert",
@@ -16,9 +16,9 @@
   "author": "Rodolphe Belouin <rodolphe.belouin@gmail.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/rbelouin/wadl2json/issues"
+    "url": "https://github.com/CleverCloud/wadl2json/issues"
   },
-  "homepage": "https://github.com/rbelouin/wadl2json",
+  "homepage": "https://github.com/CleverCloud/wadl2json",
   "dependencies": {
     "js-beautify": "^1.5.10",
     "lodash": "^3.10.0",
